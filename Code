@@ -1,0 +1,132 @@
+#define DAC0832 XBYTE[0X0290]
+#include<absacc.h>
+#include<reg51.h>
+sbit p10=P1^0;
+sbit p11=P1^1;
+sbit p12=P1^2;
+sbit p13=P1^3;
+sbit p14=P1^4;
+sbit p15=P1^5;
+sbit p16=P1^6;
+sbit p17=P1^7;
+unsigned char m=0;          // Delay function variable
+unsigned char n=0;          // Square wave function variable
+unsigned char a=0;          // Delta wave function variable
+unsigned char b=0;          // Trapezoidal wave function variables
+unsigned char c=0;          // Sawtooth wave function variable
+sbit cs=P3^7;
+sbit wr=P3^6;
+
+void delay(unsigned int m)  //Delay function
+{
+ while(m--);
+}
+
+void square()               //Square wave function
+{
+n=2;
+EA=1;
+ET0=1;
+IT0=1;
+TH0=(65536-10000)/256;
+TL0=(65536-10000)%256;
+TR0=1;
+DAC0832=255;
+while(1)
+{
+ if(n==0) break;
+}
+}
+void sinusoidal ()         //Sine wave function
+{
+unsigned char i=0;
+unsigned char code table[]={  125,	 148,	170,	191,	209,	224,	235,	242,	245,	242,	235,	224,	209,	191,	170,	148,
+	125,	101,	79,	58,	40,	25,	14,	7,	5,	7,	14,	25,	40,	58,	79,	101
+};                         
+for(i=0;i<32;i++)
+DAC0832=table[i];
+}
+
+void triangula ()             //Triangular wave function
+{
+ while(1)
+ {
+ DAC0832=a++;            
+ //delay(100);
+ if(a==0xff) break;
+ }
+ while(1)                  
+ {
+ DAC0832=a--;
+ //delay(100);
+ if(a==0) break;
+ }
+}
+
+void trapezoidal ()              //Trapezoidal wave function
+{
+ while(1)
+ {
+ DAC0832=b++;          
+ if(b==0xff) 
+{
+ delay(100);           
+ break;
+ }
+}
+ while(1)                  
+ {
+ DAC0832=b--;
+ //delay(100);
+ if(b==0)
+ { 
+ delay(100);
+ break;
+ }
+}
+}
+
+void sawtooth ()                //Sawtooth wave function
+{
+while(1)
+ {
+ DAC0832=c++;               
+ if(c==0xff) break;
+ }
+ while(1)                      
+ {
+ DAC0832=0;                      
+ break;
+ }
+}
+
+void time0() interrupt 1     //Interrupt function of rectangular wave
+{
+TR0=0;
+TH0=(65536-10000)/256;
+TL0=(65536-10000)%256;
+TR0=1;
+DAC0832=0;
+n--;
+}
+
+void main()
+{
+
+while(1)
+{
+P1=0xff;
+p15=1;
+p16=1;
+p16=1;
+if(p10==1)
+   sinusoidal ();
+if(p11==1)
+   square ();
+if(p12==1)
+   triangula ();
+if(p13==1)
+   trapezoidal ();
+if(p14==1)
+   sawtooth ();
+}
