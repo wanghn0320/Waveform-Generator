@@ -37,7 +37,7 @@ while(1)
  if(n==0) break;
 }
 }
-void sinusoidal ()         //Sine wave function
+void sinusoidal()         //Sine wave function
 {
 unsigned char i=0;
 unsigned char code table[]={  125,	 148,	170,	191,	209,	224,	235,	242,	245,	242,	235,	224,	209,	191,	170,	148,
@@ -47,7 +47,7 @@ for(i=0;i<32;i++)
 DAC0832=table[i];
 }
 
-void triangula ()             //Triangular wave function
+void triangula()             //Triangular wave function
 {
  while(1)
  {
@@ -63,7 +63,7 @@ void triangula ()             //Triangular wave function
  }
 }
 
-void trapezoidal ()              //Trapezoidal wave function
+void trapezoidal()              //Trapezoidal wave function
 {
  while(1)
  {
@@ -86,7 +86,7 @@ void trapezoidal ()              //Trapezoidal wave function
 }
 }
 
-void sawtooth ()                //Sawtooth wave function
+void sawtooth()                //Sawtooth wave function
 {
 while(1)
  {
@@ -120,13 +120,13 @@ p15=1;
 p16=1;
 p16=1;
 if(p10==1)
-   sinusoidal ();
+   sinusoidal();
 if(p11==1)
-   square ();
+   square();
 if(p12==1)
-   triangula ();
+   triangula();
 if(p13==1)
-   trapezoidal ();
+   trapezoidal();
 if(p14==1)
-   sawtooth ();
+   sawtooth();
 }
